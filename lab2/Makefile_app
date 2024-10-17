@@ -1,0 +1,34 @@
+C = g++
+CFLAGS = -Wall
+
+# DIRs
+STATIC_DIR = ./static
+DYNAMIC_DIR = ./dynamic
+BIN_DIR = ./bin
+
+# Lib names
+STATIC_LIB = libschool.a
+DYNAMIC_LIB = libschool.so
+
+# Files
+MAIN = main.o
+UI = UserInterface.o
+
+# Aims
+all: $(BIN_DIR)/app_static $(BIN_DIR)/app_dynamic
+	
+$(BIN_DIR)/app_static: $(MAIN) $(UI) $(STATIC_DIR)/$(STATIC_LIB)
+	$(C) $(MAIN) $(UI) -L$(STATIC_DIR) -lschool -o $@
+	
+$(BIN_DIR)/app_dynamic: $(MAIN) $(UI) $(DYNAMIC_DIR)/$(DYNAMIC_LIB)
+	$(C) $(MAIN) $(UI) -L$(DYNAMIC_DIR) -lschool -Wl,-rpath=$(DYNAMIC_DIR) -o $@
+
+main.o: main.cpp
+	$(C) $(CFLAGS) -c $< -o $@
+	
+UserInterface.o: UserInterface.cpp
+	$(C) $(CFLAGS) -c $< -o $@
+	
+clean:
+	rm -f $(BIN_DIR)/app_static $(BIN_DIR)/app_dynamic
+	rm -f $(STATIC_DIR)/*.o $(DYNAMIC_DIR)/*.o $(STATIC_DIR)/$(STATIC_LIB) $(DYNAMIC_DIR)/$(DYNAMIC_LIB) 

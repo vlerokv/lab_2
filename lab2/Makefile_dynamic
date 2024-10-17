@@ -1,0 +1,19 @@
+CC = g++
+CFLAGS = -fPIC -Wall
+LDFLAGS = -shared
+
+DYNAMIC_OBJECTS = SchoolClass.o SchoolDatabase.o
+DYNAMIC_LIB = libschool.so
+
+DYNAMIC_DIR = ./dynamic
+
+all: $(DYNAMIC_DIR)/$(DYNAMIC_LIB)
+
+$(DYNAMIC_DIR)/$(DYNAMIC_LIB): $(addprefix $(DYNAMIC_DIR)/, $(DYNAMIC_OBJECTS))
+	$(CC) $(LDFLAGS) -o $@ $^
+
+$(DYNAMIC_DIR)/%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+	
+clean:
+	rm -f $(DYNAMIC_DIR)/*.o $(DYNAMIC_DIR)/$(DYNAMIC_LIB)
